@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class MainServlet extends HttpServlet {
   private PostController controller;
+  private static String path, method;
+  private static long id;
 
   @Override
   public void init() {
@@ -22,9 +24,9 @@ public class MainServlet extends HttpServlet {
   protected void service(HttpServletRequest req, HttpServletResponse resp) {
     // если деплоились в root context, то достаточно этого
     try {
-      final var path = req.getRequestURI();
-      final var method = req.getMethod();
-      final var id = Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
+      path = req.getRequestURI();
+      method = req.getMethod();
+      id = Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
       // primitive routing
       if (method.equals("GET") && path.equals("/api/posts")) {
         controller.all(resp);
