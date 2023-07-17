@@ -10,8 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 
 public class MainServlet extends HttpServlet {
   private PostController controller;
-  private static String path, method;
-  private static long id;
+  private static final String methodGet = "GET";
+  private static final String methodPost = "POST";
+  private static final String methodDelete = "DELETE";
+  private static final String pathApiPosts = "/api/posts";
+  private static final String pathApiPostsWithId = "/api/posts";
+
+
 
   @Override
   public void init() {
@@ -24,24 +29,24 @@ public class MainServlet extends HttpServlet {
   protected void service(HttpServletRequest req, HttpServletResponse resp) {
     // если деплоились в root context, то достаточно этого
     try {
-      path = req.getRequestURI();
-      method = req.getMethod();
-      id = Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
+      final var path = req.getRequestURI();
+      final var method = req.getMethod();
+      final var id = Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
       // primitive routing
-      if (method.equals("GET") && path.equals("/api/posts")) {
+      if (method.equals(methodGet) && path.equals(pathApiPosts)) {
         controller.all(resp);
         return;
       }
-      if (method.equals("GET") && path.matches("/api/posts/\\d+")) {
+      if (method.equals(methodGet) && path.matches(pathApiPostsWithId)) {
         // easy way
         controller.getById(id, resp);
         return;
       }
-      if (method.equals("POST") && path.equals("/api/posts")) {
+      if (method.equals(methodPost) && path.equals(pathApiPosts)) {
         controller.save(req.getReader(), resp);
         return;
       }
-      if (method.equals("DELETE") && path.matches("/api/posts/\\d+")) {
+      if (method.equals(methodDelete) && path.matches(pathApiPostsWithId)) {
         // easy way
         controller.removeById(id, resp);
         return;
