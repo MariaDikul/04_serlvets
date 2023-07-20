@@ -6,7 +6,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 // Stub
-@Repository
 public class PostRepository {
     private static final ConcurrentHashMap<Long, Post> repository = new ConcurrentHashMap<>();
     private static final AtomicLong counter = new AtomicLong(1);
